@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WheatVision AI — Buğday Tohumu Sınıflandırma Sistemi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <!-- TOP NAVBAR -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <div class="logo-icon">🌾</div>
+      <div class="brand-text">
+        <span class="brand-title">WheatVision AI</span>
+        <span class="brand-sub">PyTorch Deep Learning • AgriTech Inference Platform</span>
+      </div>
+    </div>
+    <div class="nav-badges">
+      <span class="badge badge-success"><span class="dot"></span> Model: Active</span>
+      <span class="badge badge-tech">PyTorch 2.x MLP</span>
+      <span class="badge badge-tech">Acc: 85.71%</span>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="container">
+
+    <!-- HERO INTRO -->
+    <section class="hero-card">
+      <div class="hero-content">
+        <h2>Endüstriyel Buğday Tohumu Varyete Tespiti</h2>
+        <p>
+          Tohumun 7 morfolojik ve geometrik parametresini girerek yapay sinir ağı modelimiz üzerinden 
+          <strong>Kama</strong>, <strong>Rosa</strong> veya <strong>Canadian</strong> buğday türünü anında sınıflandırın.
+        </p>
+      </div>
+      <div class="presets-bar">
+        <span class="presets-label">Hızlı Test Örnekleri:</span>
+        <div class="preset-buttons">
+          <button type="button" class="btn-preset" data-preset="kama">🌾 Kama Örneği</button>
+          <button type="button" class="btn-preset" data-preset="rosa">🌾 Rosa Örneği</button>
+          <button type="button" class="btn-preset" data-preset="canadian">🌾 Canadian Örneği</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTENT GRID -->
+    <div class="main-grid">
+
+      <!-- FORM SECTION (LEFT) -->
+      <section class="card input-card">
+        <div class="card-header">
+          <h3>Tohum Morfolojik Parametreleri</h3>
+          <span class="card-sub">7 Geometrik X-Işını Özelliği</span>
+        </div>
+
+        <form id="classifyForm" class="form-grid">
+
+          <!-- 1. Area -->
+          <div class="param-group">
+            <div class="param-label-row">
+              <label for="area">Tohum Alanı (A)</label>
+              <span class="param-unit">mm²</span>
+            </div>
+            <div class="param-control">
+              <input type="range" id="area_slider" min="10.5" max="21.2" step="0.01" value="14.88">
+              <input type="number" id="area" name="area" min="8.0" max="25.0" step="0.01" value="14.88" required>
+            </div>
+          </div>
+
+          <!-- 2. Perimeter -->
+          <div class="param-group">
+            <div class="param-label-row">
+              <label for="perimeter">Çevre Uzunluğu (P)</label>
+              <span class="param-unit">mm</span>
+            </div>
+            <div class="param-control">
+              <input type="range" id="perimeter_slider" min="12.4" max="17.3" step="0.01" value="14.57">
+              <input type="number" id="perimeter" name="perimeter" min="10.0" max="20.0" step="0.01" value="14.57" required>
+            </div>
+          </div>
+
+          <!-- 3. Compactness -->
+          <div class="param-group">
+            <div class="param-label-row">
+              <label for="compactness">Kompaklık (C)</label>
+              <span class="param-unit">4*π*A/P²</span>
+            </div>
+            <div class="param-control">
+              <input type="range" id="compactness_slider" min="0.80" max="0.92" step="0.001" value="0.881">
+              <input type="number" id="compactness" name="compactness" min="0.70" max="0.98" step="0.001" value="0.881" required>
+            </div>
+          </div>
+
+          <!-- 4. Length of Kernel -->
+          <div class="param-group">
+            <div class="param-label-row">
+              <label for="length_of_kernel">Tane Uzunluğu</label>
+              <span class="param-unit">mm</span>
+            </div>
+            <div class="param-control">
+              <input type="range" id="length_of_kernel_slider" min="4.8" max="6.7" step="0.001" value="5.554">
+              <input type="number" id="length_of_kernel" name="length_of_kernel" min="4.0" max="7.5" step="0.001" value="5.554" required>
+            </div>
+          </div>
+
+          <!-- 5. Width of Kernel -->
+          <div class="param-group">
+            <div class="param-label-row">
+              <label for="width_of_kernel">Tane Genişliği</label>
+              <span class="param-unit">mm</span>
+            </div>
+            <div class="param-control">
+              <input type="range" id="width_of_kernel_slider" min="2.6" max="4.1" step="0.001" value="3.333">
+              <input type="number" id="width_of_kernel" name="width_of_kernel" min="2.0" max="4.5" step="0.001" value="3.333" required>
+            </div>
+          </div>
+
+          <!-- 6. Asymmetry Coefficient -->
+          <div class="param-group">
+            <div class="param-label-row">
+              <label for="asymmetry_coefficient">Asimetri Katsayısı</label>
+              <span class="param-unit">oran</span>
+            </div>
+            <div class="param-control">
+              <input type="range" id="asymmetry_coefficient_slider" min="0.7" max="8.5" step="0.01" value="1.018">
+              <input type="number" id="asymmetry_coefficient" name="asymmetry_coefficient" min="0.5" max="9.5" step="0.01" value="1.018" required>
+            </div>
+          </div>
+
+          <!-- 7. Length of Groove -->
+          <div class="param-group">
+            <div class="param-label-row">
+              <label for="length_of_groove">Tane Oluk Uzunluğu</label>
+              <span class="param-unit">mm</span>
+            </div>
+            <div class="param-control">
+              <input type="range" id="length_of_groove_slider" min="4.5" max="6.6" step="0.001" value="4.956">
+              <input type="number" id="length_of_groove" name="length_of_groove" min="4.0" max="7.0" step="0.001" value="4.956" required>
+            </div>
+          </div>
+
+          <button type="submit" id="btnSubmit" class="btn-primary">
+            <span class="btn-text">🔬 Tohum Varyetesini Sınıflandır</span>
+            <span class="btn-spinner hidden"></span>
+          </button>
+
+        </form>
+      </section>
+
+      <!-- RESULTS SECTION (RIGHT) -->
+      <section class="card result-card">
+        <div class="card-header">
+          <h3>Sınıflandırma Sonuç Paneli</h3>
+          <span class="card-sub">PyTorch Softmax Dağılımı</span>
+        </div>
+
+        <div id="initialState" class="result-placeholder">
+          <div class="placeholder-icon">🌱</div>
+          <h4>Model Çıkarımına Hazır</h4>
+          <p>Sol taraftaki parametreleri ayarlayın veya hızlı bir örnek seçip <strong>"Sınıflandır"</strong> butonuna basın.</p>
+        </div>
+
+        <div id="resultState" class="result-details hidden">
+          
+          <!-- Top Variety Card -->
+          <div class="variety-banner" id="varietyBanner">
+            <div class="variety-header">
+              <span class="variety-tag">Tespit Edilen Çeşit</span>
+              <h2 id="varietyName">Kama</h2>
+              <div class="variety-origin" id="varietyOrigin">📍 Polonya / Orta Avrupa</div>
+            </div>
+            <div class="variety-score">
+              <span class="score-num" id="confidenceNum">%99.9</span>
+              <span class="score-label">Model Güven Oranı</span>
+            </div>
+          </div>
+
+          <!-- Description Box -->
+          <div class="variety-desc-box">
+            <h5 id="varietyTitle">Kama Buğdayı (Triticum aestivum)</h5>
+            <p id="varietyDesc">Yüksek adaptasyon yeteneğine sahip yaygın kışlık buğday varyetesi.</p>
+          </div>
+
+          <!-- Probability Distribution -->
+          <div class="prob-section">
+            <h4>Tüm Sınıfların Olasılık Dağılımı</h4>
+            
+            <!-- Kama Bar -->
+            <div class="prob-item">
+              <div class="prob-info">
+                <span class="prob-name">🌾 Kama</span>
+                <span class="prob-pct" id="pctKama">0%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-bar bar-kama" id="barKama" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- Rosa Bar -->
+            <div class="prob-item">
+              <div class="prob-info">
+                <span class="prob-name">🌾 Rosa</span>
+                <span class="prob-pct" id="pctRosa">0%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-bar bar-rosa" id="barRosa" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- Canadian Bar -->
+            <div class="prob-item">
+              <div class="prob-info">
+                <span class="prob-name">🌾 Canadian</span>
+                <span class="prob-pct" id="pctCanadian">0%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-bar bar-canadian" id="barCanadian" style="width: 0%;"></div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- API Details (Collapsible) -->
+          <details class="api-details">
+            <summary>API Yanıtını Gör (JSON)</summary>
+            <pre id="jsonPreview">{}</pre>
+          </details>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div>Geliştirici: <strong>Tunahan Buçak</strong> • Full-Stack AI Engineer</div>
+    <div class="footer-links">
+      <a href="https://github.com/tunahanbucak/Deep-Learning-PyTorch-Mastery" target="_blank">PyTorch Notebook Repo ↗</a>
+      <span>•</span>
+      <a href="/docs" target="_blank">FastAPI Swagger UI ↗</a>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
